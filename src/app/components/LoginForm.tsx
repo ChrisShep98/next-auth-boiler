@@ -1,17 +1,22 @@
 "use client";
-
 import { Stack, Typography } from "@mui/material";
 import Link from "next/link";
-import React, { useState } from "react";
-import { signIn } from "next-auth/react";
+import React, { useEffect, useState } from "react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
+  const session = useSession();
   const router = useRouter();
+
+  useEffect(() => {
+    if (session.status === "authenticated") {
+      router.replace("/dashboard");
+    }
+  }, [session, router]);
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
